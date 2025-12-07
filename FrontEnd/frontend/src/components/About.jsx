@@ -7,9 +7,9 @@ export default function About() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [index, setIndex] = useState(0);
 
-  // Typewriter text animation for the "Why Choose Us" title
+  // Typewriter animation
   useEffect(() => {
-    const speed = isDeleting ? 80 : 120;
+    const speed = isDeleting ? 70 : 120;
 
     const timeout = setTimeout(() => {
       if (!isDeleting) {
@@ -17,7 +17,7 @@ export default function About() {
           setDisplayedText(fullText.substring(0, index + 1));
           setIndex(index + 1);
         } else {
-          setTimeout(() => setIsDeleting(true), 800);
+          setTimeout(() => setIsDeleting(true), 700);
         }
       } else {
         if (index > 0) {
@@ -36,17 +36,19 @@ export default function About() {
     <>
       {/* ABOUT SECTION */}
       <section id="about" className="w-full bg-[#E6E6E6] py-20 relative">
-        {/* Vertical teal strip behind the content */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 md:w-32 h-full bg-teal-700 z-0"></div>
+        {/* Background strip */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 md:w-28 h-full bg-teal-700"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 px-6 md:px-20">
           <motion.img
-            src="/about.jpg"
+            src="/about.webp"
+            loading="lazy"
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="w-[90%] md:w-[480px] rounded-xl shadow-xl object-cover"
+            className="w-full max-w-[480px] rounded-xl shadow-xl object-cover"
+            alt="About Jupiter VK Design"
           />
 
           <motion.div
@@ -54,7 +56,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="bg-white shadow-xl rounded-xl p-10 md:p-14 max-w-xl border border-gray-200 relative"
+            className="bg-white shadow-xl rounded-xl p-10 md:p-14 max-w-xl border border-gray-200"
           >
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
               About Us
@@ -64,26 +66,24 @@ export default function About() {
               <span className="font-semibold text-teal-800">
                 Jupiter VK Design & Interior Decoration
               </span>
-              , a leading name in interior fit-out contracting, dedicated to
-              delivering complete
+              , a leading name in interior fit-out contracting, delivering
+              complete
               <span className="font-semibold text-teal-800">
                 {" "}
                 — design and execution{" "}
               </span>
-              solutions. Driven by an unwavering focus on quality, our
-              experienced team brings creativity and precision to tiling,
-              flooring, carpentry, false ceilings, glass and aluminum
-              installations, metal fabrication, and plaster finishes, shaping
-              every space into a refined and inspiring environment.
+              solutions. Our experienced team brings creativity and precision to
+              every detail including tiling, flooring, carpentry, false ceilings,
+              aluminum installations, metal fabrication, and plaster finishes.
             </p>
 
             <button
-              onClick={() => {
+              onClick={() =>
                 document.getElementById("services").scrollIntoView({
                   behavior: "smooth",
-                });
-              }}
-              className="bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-full font-medium shadow-md cursor-pointer"
+                })
+              }
+              className="bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-full font-medium shadow-md"
             >
               READ MORE
             </button>
@@ -103,149 +103,77 @@ export default function About() {
           Featured Services
         </motion.h2>
 
-        {/* Service cards with staggered animations */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 px-6">
-          {/* Interior Designing */}
-          <motion.div
-            initial={{ opacity: 0, x: -80, y: 0 }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <img
-              src="/interior.jpg"
-              className="w-full h-48 object-cover rounded-xl shadow-lg"
-            />
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-white text-lg font-medium">Interior designing</p>
-              <button
-                onClick={() =>
-                  (window.location.href = "/Interior_designing")
-                }
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </motion.div>
+          {[
+            {
+              title: "Interior Designing",
+              img: "/interior.webp",
+              link: "/Interior_designing",
+            },
+            {
+              title: "Joinery",
+              img: "/joinery.webp",
+              link: "/Joinery",
+            },
+            {
+              title: "False Ceiling & Light Partitions",
+              img: "/False-Ceiling.webp",
+              link: "/False_ceiling",
+            },
+            {
+              title: "Floor & Wall Tiling Works",
+              img: "/service-plumbing.webp",
+              link: "/Tiling_works",
+            },
+            {
+              title: "Carpentry Works",
+              img: "/carpentry.webp",
+              link: "/Carpentry",
+            },
+          ].map((service, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.1 }}
+              className="flex flex-col"
+            >
+              <img
+                src={service.img}
+                loading="lazy"
+                className="w-full h-48 object-cover rounded-xl shadow-lg"
+              />
 
-          {/* Joinery */}
-          <motion.div
-            initial={{ opacity: 0, x: -70, y: 20 }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <img
-              src="/joinery.jpg"
-              className="w-full h-48 object-cover rounded-xl shadow-lg"
-            />
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-white text-lg font-medium">Joinery</p>
-              <button
-                onClick={() => (window.location.href = "/Joinery")}
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </motion.div>
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-white text-lg font-medium">{service.title}</p>
 
-          {/* False Ceiling */}
-          <motion.div
-            initial={{ opacity: 0, x: -60, y: -20 }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <img
-              src="/False-Ceiling.jpg"
-              className="w-full h-48 object-cover rounded-xl shadow-lg"
-            />
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-white text-lg font-medium">
-                False Ceiling & <br />
-                Light Partitions
-              </p>
-              <button
-                onClick={() => (window.location.href = "/False_ceiling")}
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Tiling Works */}
-          <motion.div
-            initial={{ opacity: 0, x: -50, y: 25 }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.95, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <img
-              src="/service-plumbing.jpg"
-              className="w-full h-48 object-cover rounded-xl shadow-lg"
-            />
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-white text-lg font-medium">
-                Floor & Wall <br />
-                Tiling Works
-              </p>
-              <button
-                onClick={() => (window.location.href = "/Tiling_works")}
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Carpentry */}
-          <motion.div
-            initial={{ opacity: 0, x: -40, y: -25 }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.0, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <img
-              src="/carpentry.jpg"
-              className="w-full h-48 object-cover rounded-xl shadow-lg"
-            />
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-white text-lg font-medium">Carpentry works</p>
-              <button
-                onClick={() => (window.location.href = "/Carpentry")}
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white cursor-pointer"
-              >
-                →
-              </button>
-            </div>
-          </motion.div>
+                <button
+                  onClick={() => (window.location.href = service.link)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-white text-white"
+                >
+                  →
+                </button>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* WHY CHOOSE US SECTION */}
       <section className="w-full bg-gray-200 py-28 relative">
-        {/* Background center strip */}
         <div className="absolute inset-0 flex justify-center pointer-events-none">
           <div className="w-[45%] bg-teal-700"></div>
         </div>
 
         <div className="relative w-full flex flex-col md:flex-row justify-center items-center px-6 md:px-24">
-          {/* Text content box */}
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="
-              bg-[#E8E8E8] 
+              bg-[#E8E8E8]
               rounded-2xl shadow-xl 
               p-10 md:p-14 
               w-[90%] md:w-[55%]
@@ -263,72 +191,61 @@ export default function About() {
             </h2>
 
             <p className="text-[15px] leading-6 text-gray-700 mb-5">
-              Our expertise spans the complete spectrum of interior
-              transformation—from precision tiling and bespoke decoration design
-              to expertly executed carpentry, wood flooring, and false ceiling
-              installations. We seamlessly integrate glass and aluminum
-              elements, master metal fabrication and steel installations, and
-              deliver flawless plaster finishes. Every detail reflects our
-              commitment to creating spaces that are as durable as they are
-              beautiful.
+              Our expertise spans the complete spectrum of interior transformation—
+              from precision tiling and decoration design to expertly executed
+              carpentry, flooring, false ceiling installations, glass and aluminum
+              work, and flawless plaster finishes.
             </p>
 
             <p className="text-[15px] leading-6 text-gray-700">
-              We believe in transparent partnerships and proactive support
-              throughout your renovation journey. Our seasoned team listens to
-              your vision, answers your questions, and guides every step with
-              care. Your space deserves craftsmanship that reflects your
-              lifestyle—and that journey begins with a conversation. Contact us
-              today for a personalized, no-obligation consultation.
+              We believe in transparent partnerships and proactive support.
+              Everything begins with a conversation—contact us today for a
+              personalized, no-obligation consultation.
             </p>
           </motion.div>
 
-          {/* Feature image */}
           <motion.img
-            src="/why-choose-us..jpg"
+            src="/why-choose-us..webp"
+            loading="lazy"
             initial={{ opacity: 0, y: 80 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="
-              w-full md:w-[60%] 
-              rounded-xl shadow-xl 
-              object-cover 
-              md:ml-auto
-            "
+            className="w-full md:w-[60%] rounded-xl shadow-xl object-cover md:ml-auto"
+            alt="Why Choose Us"
           />
         </div>
       </section>
 
-     {/* LICENSE SECTION */}
-<section className="w-full bg-teal-700 py-10 md:py-24 px-4 md:px-24">
-  <h2 className="text-center text-4xl font-extrabold text-white mb-14">
-    Company License
-  </h2>
+      {/* LICENSE SECTION */}
+      <section className="w-full bg-teal-700 py-10 md:py-24 px-4 md:px-24">
+        <h2 className="text-center text-4xl font-extrabold text-white mb-14">
+          Company License
+        </h2>
 
-  <div className="flex justify-center">
-    <div className="w-full md:w-[60%]">
-      {/* License display */}
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="bg-white rounded-2xl shadow-xl p-6 border border-gray-300"
-      >
-        <h3 className="text-center text-2xl font-bold mb-6">
-          Commercial License
-        </h3>
+        <div className="flex justify-center">
+          <div className="w-full md:w-[60%]">
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="bg-white rounded-2xl shadow-xl p-6 border border-gray-300"
+            >
+              <h3 className="text-center text-2xl font-bold mb-6">
+                Commercial License
+              </h3>
 
-        <img
-          src="/commercial-license.jpg"
-          alt="Commercial License"
-          className="w-full h-[600px] md:h-[758px] object-cover md:object-contain rounded-xl shadow-md bg-white"
-        />
-      </motion.div>
-    </div>
-  </div>
-</section>
+              <img
+                src="/commercial-license.jpg"
+                loading="lazy"
+                alt="Commercial License"
+                className="w-full h-auto max-h-[758px] object-contain rounded-xl shadow-md"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

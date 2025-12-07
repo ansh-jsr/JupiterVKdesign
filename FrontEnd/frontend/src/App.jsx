@@ -16,21 +16,19 @@ import Electrical from "./components/Electrical";
 import Plumbing from "./components/Plumbing";
 import HVAC from "./components/HVAC";
 
-// ✅ NEW IMPORT
+// Scroll-to-top on route change (No functionality changed)
 import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   return (
     <Router>
-      {/* ✅ FIXES PAGE NOT LOADING FROM TOP */}
       <ScrollToTop />
 
       <div className="font-sans bg-[#111] text-white">
         <Navbar />
 
         <Routes>
-
-          {/* HOME PAGE – Home + About + Contact */}
+          {/* HOME PAGE (Combined) */}
           <Route
             path="/"
             element={
@@ -53,7 +51,6 @@ export default function App() {
           <Route path="/Electrical" element={<Electrical />} />
           <Route path="/Plumbing" element={<Plumbing />} />
           <Route path="/HVAC" element={<HVAC />} />
-
         </Routes>
 
         <Footer />

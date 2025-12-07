@@ -13,3 +13,23 @@ html, body {
   75% { transform: translateX(-4px); }
   100% { transform: translateX(0); }
 }
+/* ✅ Minimal stacking fix so navbar stays above slider */
+nav {
+  z-index: 9999;
+  position: fixed;
+}
+
+/* ✅ Prevent any unwanted horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* ✅ Tablet menu spacing & width safety */
+@media (max-width: 1024px) {
+  nav ul {
+    gap: 20px;
+  }
+  nav img {
+    height: 45px;
+  }
+}

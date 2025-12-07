@@ -36,7 +36,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <img src="/logo.png" alt="Express Zone" className="w-40 mb-6" />
+          <img src="/logovk.png" alt="Express Zone" className="w-40 mb-6" />
           <p className="text-sm text-gray-400 leading-relaxed">
             Delivering interior, designing and civil solutions with quality & precision.
           </p>
@@ -58,7 +58,7 @@ export default function Footer() {
           </ul>
         </motion.div>
 
-        {/* Services (NO col-span so alignment stays correct) */}
+        {/* Services  */}
         <motion.div
           key={location.pathname + "-services"}
           className="w-full"
@@ -96,7 +96,7 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        {/* Branches (now correctly aligned on same row!) */}
+        {/* Branches */}
         <motion.div
           key={location.pathname + "-branches"}
           initial={{ opacity: 0, x: 80 }}

@@ -12,18 +12,19 @@ export default function InteriorDesigning() {
 
         {/* BACKGROUND IMAGE */}
         <motion.img
-          src="/public/interior-bg.jpg"
-          initial={{ opacity: 0, x: 150 }}
+          src="/interior-bg.webp"
+          initial={{ opacity: 0, x: 120 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
           className="w-full h-[450px] object-cover rounded-xl"
+          loading="lazy"
         />
 
         {/* OVERLAY TITLE BOX */}
         <motion.div
-          initial={{ opacity: 0, x: -150 }}
+          initial={{ opacity: 0, x: -120 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
           className="absolute top-1/2 left-10 -translate-y-1/2 bg-white/90 
                      border-4 border-teal-700 p-6 rounded-lg shadow-xl max-w-sm"
         >
@@ -34,28 +35,27 @@ export default function InteriorDesigning() {
 
       </div>
 
-      {/* =======================================================
-          NEW INTERIOR DETAILS SECTION (TEAL THEME + FIXED)
-      ======================================================== */}
+      {/* INTERIOR DETAILS SECTION */}
       <section className="w-11/12 max-w-7xl bg-gray-100 py-16 px-8 rounded-xl shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-          {/* IMAGE – animated from right to left */}
+          {/* IMAGE */}
           <motion.img
-            src="/interior-detail.jpg"   // change if needed
-            initial={{ opacity: 0, x: -120 }}
+            src="/interior-detail.webp"
+            initial={{ opacity: 0, x: -100 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9 }}
             className="w-full rounded-xl shadow-lg object-cover"
+            loading="lazy"
           />
 
-          {/* TEXT — animated from left to right */}
+          {/* TEXT */}
           <motion.div
-            initial={{ opacity: 0, x: 120 }}
+            initial={{ opacity: 0, x: 100 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-6">
               Interior Designing & Fitout
@@ -68,7 +68,7 @@ export default function InteriorDesigning() {
             </p>
 
             <p className="text-gray-700 text-lg leading-relaxed mb-4">
-              We transform your space with elegance, innovation, and functionality — 
+              We transform your space with elegance, innovation, and functionality —
               delivering premium finishes with perfect craftsmanship.
             </p>
 
@@ -85,6 +85,7 @@ export default function InteriorDesigning() {
               <li>• Complete Fitout Execution</li>
             </ul>
           </motion.div>
+
         </div>
       </section>
 

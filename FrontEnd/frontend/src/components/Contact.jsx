@@ -1,6 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Phone, Mail, MapPin, Globe, CheckCircle } from "lucide-react";
+
+// Memoized regex patterns to avoid recreation
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phonePattern = /^[+\d][\d\s()+-]{6,}$/;
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,60 +17,51 @@ export default function Contact() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [shakeField, setShakeField] = useState("");
-
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Animation controls for Enter key button tap
   const tapControls = useAnimation();
   const submitBtnRef = useRef(null);
 
-  // -------------------------
-  // HANDLE INPUT CHANGE (NO VALIDATION HERE)
-  // -------------------------
+  // Memoized backend URL for production
+  const API_URL = useMemo(
+    () => import.meta.env.VITE_BACKEND_URL + "/api/contact",
+    []
+  );
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // -------------------------
-  // FORM SUBMISSION VALIDATION ONLY
-  // -------------------------
-  const handleSubmit = async (e) => {
-    if (e) e.preventDefault();
-
+  const validateForm = () => {
     let valid = true;
 
-    // Email validation (submit only)
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(formData.email)) {
       setEmailError("Enter a valid email (must include @ and domain)");
       setShakeField("email");
       valid = false;
-    } else {
-      setEmailError("");
-    }
+    } else setEmailError("");
 
-    // Phone validation (submit only)
-    const phonePattern = /^[+\d][\d\s()+-]{6,}$/;
     if (!phonePattern.test(formData.phone)) {
       setPhoneError("Enter a valid phone number");
       setShakeField("phone");
       valid = false;
-    } else {
-      setPhoneError("");
-    }
+    } else setPhoneError("");
 
-    // Reset shake class shortly after
     setTimeout(() => setShakeField(""), 400);
+    return valid;
+  };
 
-    if (!valid) return;
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
 
-    // --- SHOW SUCCESS IMMEDIATELY (optimistic feedback) ---
+    if (!validateForm()) return;
+
+    // Show success instantly (optimistic feedback)
     setShowSuccess(true);
     const hideTimeout = setTimeout(() => setShowSuccess(false), 2500);
 
-    // Submit to backend (still awaited so we can handle server failure)
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -75,21 +70,21 @@ export default function Contact() {
       const data = await res.json();
 
       if (!data.success) {
-        // backend indicated failure
         clearTimeout(hideTimeout);
         setShowSuccess(false);
         alert(data.message || "Server error while sending message");
-      } else {
-        // success: clear form (popup already visible)
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          message: "",
-        });
+        return;
       }
+
+      // Clear form on success
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+
     } catch (err) {
-      // network error or other
       clearTimeout(hideTimeout);
       setShowSuccess(false);
       alert("Failed to send message. Please try again.");
@@ -98,8 +93,10 @@ export default function Contact() {
   };
 
   return (
-    <div id="contact" className="relative w-full min-h-screen bg-gray-100 px-6 py-10">
-      
+    <div
+      id="contact"
+      className="relative w-full min-h-screen bg-gray-100 px-6 py-10"
+    >
       {/* SUCCESS POPUP */}
       {showSuccess && (
         <motion.div
@@ -115,65 +112,56 @@ export default function Contact() {
       {/* Center Vertical Teal Strip */}
       <div className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-40 sm:w-56 md:w-64 lg:w-80 bg-teal-700 pointer-events-none"></div>
 
-
       <div className="relative max-w-7xl mx-auto grid md:grid-cols-2 gap-10">
 
         {/* LEFT SECTION */}
-      <div className="bg-white rounded-lg shadow-md p-5 relative z-20 w-fit h-fit max-w-max inline-block">
- 
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.7 }}
-          className="space-y-6"
-        >
-          <h2 className="text-3xl font-bold text-teal-800">Our Branch</h2>
+        <div className="bg-white rounded-lg shadow-md p-5 relative z-20 w-fit h-fit max-w-max inline-block">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.7 }}
+            className="space-y-6"
+          >
+            <h2 className="text-3xl font-bold text-teal-800">Our Branch</h2>
 
-          <div className="space-y-4 text-gray-700">
+            <div className="space-y-4 text-gray-700">
+              <div className="flex items-start gap-3">
+                <MapPin className="text-teal-800" />
+                <p>Jupiter VK Design & Interior Decoration LLC</p>
+              </div>
 
-            <div className="flex items-start gap-3">
-              <MapPin className="text-teal-800" />
-              <p>
-                Jupiter VK Design & Interior Decoration LLC <br />
-              </p>
+              <div className="flex items-start gap-3">
+                <MapPin className="text-teal-800" />
+                <p>PO box - 118975, Al Khabeesi, Dubai, UAE</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Phone className="text-teal-800" />
+                <p>+971 52 750 4235</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Mail className="text-teal-700" />
+                <p>info@jupitervkdesign.com</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Globe className="text-teal-700" />
+                <p>www.jupitervkdesign.com</p>
+              </div>
             </div>
+          </motion.div>
+        </div>
 
-            <div className="flex items-start gap-3">
-              <MapPin className="text-teal-800" />
-              <p>PO box - 118975, Al Khabeesi, Dubai, UAE</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Phone className="text-teal-800" />
-              <p>+971 52 750 4235</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Mail className="text-teal-700" />
-              <p>info@jupitervkdesign.com</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Globe className="text-teal-700" />
-              <p>www.jupitervkdesign.com</p>
-            </div>
-
-          </div>
-        </motion.div>
-      </div>
         {/* CONTACT FORM */}
         <motion.form
           onSubmit={handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-
-              // trigger visual tap (do not await)
               tapControls.start({ scale: 0.95, transition: { duration: 0.08 } });
               tapControls.start({ scale: 1, transition: { duration: 0.12 } });
-
-              // submit immediately after triggering the animation
               handleSubmit(e);
             }
           }}
@@ -217,7 +205,9 @@ export default function Contact() {
                 placeholder="Email"
                 required
               />
-              {emailError && <p className="text-red-600 text-sm">{emailError}</p>}
+              {emailError && (
+                <p className="text-red-600 text-sm">{emailError}</p>
+              )}
             </div>
 
             {/* PHONE */}
@@ -234,7 +224,9 @@ export default function Contact() {
                 placeholder="Phone"
                 required
               />
-              {phoneError && <p className="text-red-600 text-sm">{phoneError}</p>}
+              {phoneError && (
+                <p className="text-red-600 text-sm">{phoneError}</p>
+              )}
             </div>
 
             {/* MESSAGE */}
@@ -246,9 +238,10 @@ export default function Contact() {
                 onChange={handleChange}
                 className="w-full border rounded-md p-2 h-28 text-black placeholder-gray-500 focus:outline-none focus:border-teal-700"
                 placeholder="Message"
-              ></textarea>
+              />
             </div>
 
+            {/* SUBMIT BUTTON */}
             <motion.button
               ref={submitBtnRef}
               animate={tapControls}
@@ -259,13 +252,11 @@ export default function Contact() {
             >
               Send
             </motion.button>
-
           </div>
         </motion.form>
-
       </div>
 
-      {/* BOTTOM TEAL STRIP */}
+      {/* Bottom Animation Bar */}
       <motion.div
         initial={{ width: 0 }}
         whileInView={{ width: "100%" }}
@@ -273,7 +264,6 @@ export default function Contact() {
         transition={{ duration: 0.9, ease: "easeOut" }}
         className="absolute bottom-0 left-0 h-30 bg-teal-700 pointer-events-none z-0"
       ></motion.div>
-
     </div>
   );
 }
