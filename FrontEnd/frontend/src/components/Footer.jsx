@@ -36,7 +36,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <img src="/logovk.png" alt="Express Zone" className="w-40 mb-6" />
+          <img src="/logovk.png" alt="Express Zone" className="h-16  mb-6" />
           <p className="text-sm text-gray-400 leading-relaxed">
             Delivering interior, designing and civil solutions with quality & precision.
           </p>
